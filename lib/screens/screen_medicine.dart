@@ -3,7 +3,6 @@ import 'package:ycareapp/services/medicine_services.dart';
 import 'package:ycareapp/screens/ListaMedicina.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:ycareapp/models/medicineSingole.dart';
-
 import 'DatiMedicina.dart';
 
 class MedicineScreen extends StatefulWidget {
@@ -16,6 +15,7 @@ class MedicineScreen extends StatefulWidget {
 class _MedicineScreenState extends State<MedicineScreen> {
   List<MedicinaSingole> _medicineData = [];
   final MedicinaService _medicinaService = MedicinaService();
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -86,6 +86,25 @@ class _MedicineScreenState extends State<MedicineScreen> {
                   child: const Text('Storico'),
                 ),
               ],
+            ),
+            const SizedBox(height: 20),
+            ElevatedButton(
+              onPressed: () async {
+                setState(() {
+                  _isLoading = true; // Inizia il caricamento
+                });
+                await _medicinaService.updateAllMedicineOrari();
+                await _getMedicinaSingolaData();
+                setState(() {
+                  _isLoading = false; // Termina il caricamento
+                });
+              },
+              style: ElevatedButton.styleFrom(
+                backgroundColor: Colors.deepPurple,
+                foregroundColor: Colors.white,
+                padding: const EdgeInsets.symmetric(horizontal: 20, vertical: 15),
+              ),
+              child: const Text('Ripristino Giornaliero'),
             ),
             const SizedBox(height: 20),
             Expanded(
@@ -204,7 +223,6 @@ class _MedicineScreenState extends State<MedicineScreen> {
       ),
     );
   }
-
 
   void _shareOnWhatsApp(String titolo, String numeroMedicina, String volteGiorno, String dataInizio) {
     final message = 'Titolo: $titolo\nQuantità: $numeroMedicina\nVolte al giorno: $volteGiorno\nData Inizio: $dataInizio';

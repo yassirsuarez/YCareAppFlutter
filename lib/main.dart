@@ -6,8 +6,7 @@ import 'firebase_options.dart';
 import 'screens/screen_home.dart';
 import 'screens/screen_visite.dart';
 import 'screens/screen_medicine.dart';
-import 'services/medicine_services.dart';
-import 'package:workmanager/workmanager.dart';
+
 
 
 void main() async {
@@ -15,8 +14,7 @@ void main() async {
   await Firebase.initializeApp(
     options: DefaultFirebaseOptions.currentPlatform,
   );
-  Workmanager().initialize(callbackDispatcher);
-  scheduleMidnightTask();
+
   runApp(const MyApp());
 }
 
@@ -136,29 +134,6 @@ class _MainPageState extends State<MainPage> {
     );
   }
 }
-void callbackDispatcher() {
-  Workmanager().executeTask((task, inputData) async {
-    print("Background task is running");
 
-    final medicineService = MedicinaService();
-    await medicineService.updateAllMedicineOrari();
-    return Future.value(true);
-  });
-}
-//worker
-void scheduleMidnightTask() {
-  final now = DateTime.now();
-  final nextMidnight = DateTime(now.year, now.month, now.day + 1);
-  final initialDelay = nextMidnight.difference(now);
 
-  Workmanager().registerOneOffTask(
-    "midnight_task",
-    "midnightTask",
-    initialDelay: initialDelay,
-    constraints: Constraints(
-      networkType: NetworkType.not_required,
-      requiresCharging: false,
-    ),
-  );
-}
 

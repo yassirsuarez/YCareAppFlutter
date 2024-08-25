@@ -20,24 +20,6 @@ class _ListavisiteState extends State<Listavisite> {
     _getAllVisitaData();
   }
 
-  Future<void> _openGoogleMaps(String query) async {
-    final String encodedQuery = Uri.encodeComponent(query);
-
-    final String geoUrl = 'geo:0,0?q=$encodedQuery';
-    final String webUrl = 'https://www.google.com/maps/search/?api=1&query=$encodedQuery';
-
-    if (await canLaunch(geoUrl)) {
-      print('Lancio Google Maps con geo URL: $geoUrl');
-      await launch(geoUrl);
-    } else {
-      print('Geo URL fallito, provo con l\'URL web: $webUrl');
-      if (await canLaunch(webUrl)) {
-        await launch(webUrl);
-      } else {
-        throw 'Impossibile lanciare Google Maps per la query: $query';
-      }
-    }
-  }
 
   Future<void> _eliminaVisita(String visitaId, int index) async {
     try {
@@ -109,11 +91,6 @@ class _ListavisiteState extends State<Listavisite> {
                         crossAxisAlignment: CrossAxisAlignment.start,
                         children: [
                           GestureDetector(
-                            onTap: () {
-                              final String luogo = visita['luogo'] ??
-                                  'Luogo non disponibile';
-                              _openGoogleMaps(luogo);
-                            },
                             child: Row(
                               children: [
                                 const Text(
@@ -127,7 +104,7 @@ class _ListavisiteState extends State<Listavisite> {
                                   child: Text(
                                     visita['luogo'] ?? 'Luogo non disponibile',
                                     style: const TextStyle(
-                                      color: Colors.blue,
+                                      color: Colors.black54,
                                       decoration: TextDecoration.underline,
                                     ),
                                   ),
