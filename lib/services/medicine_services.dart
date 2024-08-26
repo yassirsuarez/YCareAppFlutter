@@ -93,9 +93,13 @@ class MedicinaService{
       List<MedicinaSingole> medicineList = [];
 
       for (var doc in querySnapshot.docs) {
-        final data = doc.data();
-        final List<dynamic> orariList = data['orari'] ?? [];
+        final data = doc.data() as Map<String, dynamic>;
 
+        final numeroMedicinaStr = data['numeroMedicina'] as String?;
+        final numeroMedicina = int.tryParse(numeroMedicinaStr ?? '');
+
+        if (numeroMedicina != null && numeroMedicina > 0) {
+          final List<dynamic> orariList = data['orari'] ?? [];
         for (var orario in orariList) {
           if (orario['preso'] == false) {
             medicineList.add(
@@ -111,6 +115,7 @@ class MedicinaService{
               ),
             );
           }
+        }
         }
       }
       medicineList.sort((a, b) {

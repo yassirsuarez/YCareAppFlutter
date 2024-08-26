@@ -91,12 +91,12 @@ class _MedicineScreenState extends State<MedicineScreen> {
             ElevatedButton(
               onPressed: () async {
                 setState(() {
-                  _isLoading = true; // Inizia il caricamento
+                  _isLoading = true;
                 });
                 await _medicinaService.updateAllMedicineOrari();
                 await _getMedicinaSingolaData();
                 setState(() {
-                  _isLoading = false; // Termina il caricamento
+                  _isLoading = false;
                 });
               },
               style: ElevatedButton.styleFrom(
